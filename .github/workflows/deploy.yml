@@ -1,0 +1,71 @@
+name: Deploy
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        if: ${{ !env.ACT }}
+        with:
+          ref: 'main'
+          token: '${{ secrets.PAT }}'
+          fetch-depth: '1'
+          lfs: 'true'
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: build
+        run: |
+          set -x
+          yarn global add @quasar/cli
+          [[ -f package-lock.json ]] && rm package-lock.json
+          yarn
+          quasar build
+          tree dist/spa
+
+      - name: Checkout CDN Cache config
+        uses: actions/checkout@v2
+        with:
+          repository: xiexianbin/configs.xiexianbin.cn
+          ref: 'cdn-cache'
+          token: ${{ secrets.PAT }}
+          path: configs.xiexianbin.cn
+
+      - name: Sync code to CDN
+        uses: x-actions/go-sync@v1.1.0
+        env:
+          CDNTYPE: 'aliyun'
+          ACCESSKEYID: ${{ secrets.ACCESSKEYID }}
+          ACCESSKEYSECRET: ${{ secrets.ACCESSKEYSECRET }}
+          ENDPOINT: 'oss-cn-shanghai.aliyuncs.com'
+          BUCKETNAME: 'iam-xiexianbin-cn'
+          CACHEFILE: '/github/workspace/configs.xiexianbin.cn/iam-xiexianbin-cn.json'
+          EXCLUDE: '.git'
+          SUB_DIR: 'dist/spa'
+
+      - name: Push CDN Cache to github
+        uses: x-actions/git-push@v1
+        env:
+          GITHUB_EMAIL: 'me@xiexianbin.cn'
+          GITHUB_USERNAME: 'xiexianbin'
+          PUBLISH_REPO: https://${{ secrets.PAT }}@github.com/xiexianbin/configs.xiexianbin.cn.git
+          PUBLISH_BRANCH: cdn-cache
+          PUBLISH_DIR: 'configs.xiexianbin.cn'
+
+      - name: Sending Dingtalk Message
+        uses: x-actions/dingtalk@v2
+        env:
+          DINGTALK_ACCESS_TOKEN: ${{ secrets.DINGTALK_ACCESS_TOKEN }}
+          DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}
+          MSGTYPE: markdown
+          TITLE: "IAM Build Done"
+          TEXT: |
+            # IAM Build Done
+            > [iam.xiexianbin.cn](https://iam.xiexianbin.cn)
+            > Build Done. ^_^
