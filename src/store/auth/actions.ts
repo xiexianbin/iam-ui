@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import axios from 'axios'
-
+import { Cookies } from 'quasar';
 import { ActionTree } from 'vuex';
-import { StateInterface } from '../index';
-import { UserStateInterface } from './state';
 
 import { getUser } from 'src/rest/users'
+import { StateInterface } from '../index';
+import { IAuthState } from './state';
 import { IUser } from 'src/components/models/users';
-import { Cookies } from 'quasar';
 
-const actions: ActionTree<UserStateInterface, StateInterface> = {
+const actions: ActionTree<IAuthState, StateInterface> = {
   async asyncSetUser(context, token: string) {
     if (token) {
       // store token to localStorage
@@ -23,17 +22,24 @@ const actions: ActionTree<UserStateInterface, StateInterface> = {
     }
 
     // get user info and storage to store
-    const user: IUser = await getUser('')
+    const user: IUser = await getUser('/user') //.catch((err) => {
+    //  // get user info err, may be token is expired, remove token from Cookies and localStorage
+    //   console.log(err);
+    //   Cookies.remove('token');
+    //   localStorage.removeItem('token');
+    // });
     context.commit('signIn')
     context.commit('setUser', user)
 
     // set cookie, and expires form token
     // suggest: server side set cookie is HttpOnly
-    Cookies.set('HASCOOKIE', 'true', {
-      expires: 20,
-    });
+    // Cookies.set('token', 'true', {
+    //   expires: 20,
+    // });
   },
+
   signOut(context) {
+    Cookies.remove('token');
     localStorage.removeItem('token')
     context.commit('setUser', null)
     context.commit('signOut')

@@ -54,14 +54,15 @@
                 color="primary"
                 :loading="submitLoading"
               />
-              <q-btn
-                flat
-                no-caps
-                label="Signup"
-                color="primary"
-                to="/signup"
-                class="q-ml-sm"
-              />
+              No account yet?
+              <router-link class="text-primary" to="/signup">
+                Signup
+              </router-link>
+            </div>
+            <div>
+              <router-link class="text-primary" to="/forgot">
+                Forgot password?
+              </router-link>
             </div>
           </q-form>
           <q-separator class="q-my-md" />
@@ -71,16 +72,16 @@
               class="glossy"
               color="black"
               icon="mdi-github"
-              size="md"
+              size="sm"
               type="a"
-              href="https://github.com"
+              href="/auth/github/redirect?redirect="
             />
             <q-btn
               round
               class="glossy"
               color="black"
               icon="mdi-qqchat"
-              size="md"
+              size="sm"
               type="a"
               href="https://qq.com"
             />
@@ -89,7 +90,7 @@
               class="glossy"
               color="green"
               icon="mdi-wechat"
-              size="md"
+              size="sm"
               type="a"
               href="https://wechat.com"
             />
@@ -98,7 +99,7 @@
               class="glossy"
               color="blue"
               icon="mdi-google"
-              size="md"
+              size="sm"
               type="a"
               href="https://google.com"
             />

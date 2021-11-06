@@ -3,7 +3,7 @@ import { IToken } from 'src/components/models/token'
 import { IUser, IUserSignin } from 'src/components/models/users'
 
 const enum APIUrls {
-  baseUserURL = '/user/',
+  baseUserURL = '/users/',
   signURL = '/token/'
 }
 
@@ -16,7 +16,7 @@ export const signIn = async (userSignin: IUserSignin): Promise<IToken> => {
 export const getUser = async (username: string): Promise<IUser> => {
   let uri: string = APIUrls.baseUserURL
   if (username !== '') {
-    uri = `${APIUrls.baseUserURL}s/${username}}`
+    uri = `${APIUrls.baseUserURL}${username}`
   }
   const user: IUser = await api.get(uri);
   return user

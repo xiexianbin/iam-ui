@@ -4,8 +4,8 @@
     <!-- Section: Links  -->
     <section class="row text-center">
       <div class="col-md-3 col-lg-3 col-xl-3">
-        <h6 class="text-uppercase q-mb-md q-mt-md">Tools Website</h6>
-        <p class="q-mb-none">A website For Dev.</p>
+        <h6 class="text-uppercase q-mb-md q-mt-md">Website</h6>
+        <p class="q-mb-none">Identity and Access Management (IAM)</p>
       </div>
       <div class="col-md-2 col-lg-2 col-xl-2">
         <h6 class="text-uppercase q-mb-md q-mt-md">About</h6>

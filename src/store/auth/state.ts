@@ -1,11 +1,11 @@
 import { IUser } from 'src/components/models/users';
 
-export interface UserStateInterface {
-    user: IUser
-    isSignin: boolean
+export interface IAuthState {
+  user: IUser
+  isSignin: boolean
 }
 
-function state(): UserStateInterface {
+function state(): IAuthState {
   return {
     user: {
       uuid: '',

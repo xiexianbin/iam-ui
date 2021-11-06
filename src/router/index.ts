@@ -1,4 +1,4 @@
-// import { Cookies } from 'quasar';
+import { Cookies } from 'quasar';
 import { route } from 'quasar/wrappers';
 import {
   createMemoryHistory,
@@ -37,16 +37,21 @@ export default route<StateInterface>(function ({ store } /* { store, ssrContext 
 
   // router Guard
   Router.beforeEach((to, from, next) => {
-    // TODO(xiexianbin): sign in need gurad
-
-    // if current status is sign out, and cookies is valid, then auto sign in
-    if (!store.state.user.isSignin && localStorage.getItem('token')) {
-      console.log('cookies is valid, auth sign in.');
+    // if current status is sign out, and localStorage has token, then auto sign in
+    if (!store.state.auth.isSignin && localStorage.getItem('token')) {
+      console.log('localStorage is valid, auto sign in.');
       void store.dispatch('user/asyncSetUser', localStorage.getItem('token'));
     }
 
-    // !to.meta.isPublic && Cookies.has('HASCOOKIE')
-    // TODO(xiexianbin): need judge user.role === admin can to /manager urls
+    // get token from cookies
+    if (!store.state.auth.isSignin && !to.meta.isPublic && Cookies.has('token')) {
+      const token = Cookies.get('token')
+      console.log('jwt is:', token)
+      void store.dispatch('auth/asyncSetUser', token);
+    }
+
+    // guard token
+
     next();
   });
 

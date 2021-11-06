@@ -6,7 +6,7 @@ export interface IApplication {
 
   organization: string;
 
-  logo_url: string
+  logo_url: string;
   default_avatar_url: string;
   website_url: string;
 
@@ -20,7 +20,6 @@ export interface IApplication {
   client_id: string;
   client_secret: string;
   redirect_uris: string;
-
 
   created_at: Date;
   updated_at: Date;

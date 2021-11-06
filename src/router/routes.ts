@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] = [
       path: '',
       component: () => import('pages/Index.vue'),
       meta: {
-        isPublic: true
+        isPublic: false
       }
     }],
   },
@@ -17,7 +17,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{
         path: '',
-        component: () => import('src/pages/Signin.vue'),
+        component: () => import('src/pages/SignIn.vue'),
         meta: {
           isPublic: true
         }
@@ -28,7 +28,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
-        path: '', component: () => import('src/pages/Signup.vue'),
+        path: '', component: () => import('src/pages/SignUp.vue'),
         meta: {
           isPublic: true
         }

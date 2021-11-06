@@ -82,8 +82,8 @@ module.exports = configure(function (ctx) {
       // env
       env: {
         API: ctx.dev
-          ? 'http://a1.xiexianbin.cn'
-          : 'https://api.xiexianbin.cn'
+          ? 'http://dev.xiexianbin.cn:9001/v1'
+          : 'https://iam.xiexianbin.cn/v1'
       }
     },
 
@@ -91,7 +91,17 @@ module.exports = configure(function (ctx) {
     devServer: {
       https: false,
       port: 8080,
-      open: true // opens browser window automatically
+      open: false, // opens browser window automatically
+      proxy: {
+        // proxy all requests starting with /auth to iam /auth
+        '/auth': {
+          target: 'http://dev.xiexianbin.cn:9001',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/auth': '/auth'
+          }
+        }
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
@@ -110,7 +120,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Dialog', 'Loading', 'Notify'],
+      plugins: ['Cookies', 'Dialog', 'Loading', 'Notify'],
       config: {
         notify: {
           color: 'positive',

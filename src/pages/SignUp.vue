@@ -111,14 +111,10 @@
                 color="primary"
                 :loading="submitLoading"
               />
-              <q-btn
-                flat
-                no-caps
-                label="Sign in"
-                color="primary"
-                to="/signin"
-                class="q-ml-sm"
-              />
+              Have account?
+              <router-link class="text-primary" to="/signin">
+                Sign in
+              </router-link>
             </div>
           </q-form>
         </q-card-section>

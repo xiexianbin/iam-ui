@@ -5,7 +5,7 @@
     style="background: #f8f9fa"
     height-hint="61.59"
   >
-    <q-toolbar class="q-px-md" v-if="$store.state.user.isSignin">
+    <q-toolbar class="q-px-md" v-if="$store.state.auth.isSignin">
       <q-btn
         round
         dense
@@ -100,7 +100,7 @@
           </q-menu>
         </q-btn>
 
-        <q-btn label="Sign in" v-if="!$store.state.user.isSignin" />
+        <q-btn label="Sign in" v-if="!$store.state.auth.isSignin" />
         <q-btn dense flat no-wrap v-else>
           <q-avatar rounded size="20px">
             <img :src="$store.state.user.user.avatar_url" />
@@ -165,15 +165,15 @@
 </template>
 
 <script lang="ts">
-import { useStore } from 'vuex';
+import { useStore } from 'src/store';
 
 export default {
   name: 'Header',
   setup() {
-    const store = useStore();
+    const $store = useStore();
 
     function signOut() {
-      void store.dispatch('user/signOut');
+      void $store.dispatch('user/signOut');
     }
 
     return { signOut };
