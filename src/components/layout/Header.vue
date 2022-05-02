@@ -18,7 +18,7 @@
         class="q-mr-sm"
       />
       <div
-        v-if="$store.state.user.role === 'admin'"
+        v-if="$store.state.auth.account.user === 'admin'"
         class="
           layout__toolbar-link
           q-ml-xs q-gutter-md
@@ -103,7 +103,7 @@
         <q-btn label="Sign in" v-if="!$store.state.auth.isSignin" />
         <q-btn dense flat no-wrap v-else>
           <q-avatar rounded size="20px">
-            <img :src="$store.state.user.user.avatar_url" />
+            <img :src="$store.state.auth.account.user.avatar" />
           </q-avatar>
           <q-icon name="arrow_drop_down" size="16px" />
 
@@ -113,7 +113,7 @@
                 <q-item-section>
                   <div>
                     Signed in as
-                    <strong>{{ $store.state.user.user.username }}</strong>
+                    <strong>{{ $store.state.auth.account.user.displayName }}</strong>
                   </div>
                 </q-item-section>
               </q-item>
@@ -166,14 +166,18 @@
 
 <script lang="ts">
 import { useStore } from 'src/store';
+import { goToLink } from 'src/Setting';
+import { logout } from 'src/auth/AuthBackend';
 
 export default {
   name: 'Header',
   setup() {
     const $store = useStore();
 
-    function signOut() {
-      void $store.dispatch('user/signOut');
+    async function signOut() {
+      await logout()
+      void $store.dispatch('auth/signOut');
+      goToLink('/signout')
     }
 
     return { signOut };

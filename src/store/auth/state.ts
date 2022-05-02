@@ -1,36 +1,14 @@
-import { IUser } from 'src/components/models/users';
+import { IAccount } from 'src/components/models/account';
 
 export interface IAuthState {
-  user: IUser
+  account: IAccount | null
   isSignin: boolean
 }
 
 function state(): IAuthState {
   return {
-    user: {
-      uuid: '',
-      username: '',
-      email: '',
-      display_name: '',
-      status: '',
-      role: '',
-      email_verified: false,
-      email_verified_at: new Date(),
-      phone: '',
-      phone_verified: false,
-      phone_verified_at: new Date(),
-      age: 0,
-      avatar_url: '',
-      gender: '',
-      location: '',
-      address: '',
-      blog: '',
-      bio: '',
-      company: '',
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    isSignin: false,
+    account: {} as IAccount,
+    isSignin: false
   }
 };
 

@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/signin',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/SampleLayout.vue'),
     children: [{
         path: '',
         component: () => import('src/pages/SignIn.vue'),
@@ -24,11 +24,33 @@ const routes: RouteRecordRaw[] = [
       }],
   },
   {
+    path: '/signout',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/SignOut.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
     path: '/signup',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/SampleLayout.vue'),
     children: [
       {
         path: '', component: () => import('src/pages/SignUp.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
+    path: '/callback',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/Callback.vue'),
         meta: {
           isPublic: true
         }

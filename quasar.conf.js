@@ -55,7 +55,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
 
@@ -82,8 +82,9 @@ module.exports = configure(function (ctx) {
       // env
       env: {
         API: ctx.dev
-          ? 'http://dev.xiexianbin.cn:9001/v1'
-          : 'https://iam.xiexianbin.cn/v1'
+          ? 'http://localhost:7001'
+          : 'https://iam-api.xiexianbin.cn',
+        CDN: ctx.dev ? '' : ''
       }
     },
 
@@ -93,12 +94,12 @@ module.exports = configure(function (ctx) {
       port: 8080,
       open: false, // opens browser window automatically
       proxy: {
-        // proxy all requests starting with /auth to iam /auth
-        '/auth': {
-          target: 'http://dev.xiexianbin.cn:9001',
+        // proxy all requests starting with /api to iam /api
+        '/api': {
+          target: 'http://localhost:8000',
           changeOrigin: true,
           pathRewrite: {
-            '^/auth': '/auth'
+            '^/api': '/api'
           }
         }
       }

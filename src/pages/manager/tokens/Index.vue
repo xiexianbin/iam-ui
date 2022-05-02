@@ -15,8 +15,7 @@
 <script lang="ts">
 import { onMounted, ref } from 'vue';
 
-import { IUser } from 'src/components/models/users';
-import { listUser } from 'src/rest/users';
+import { IUser } from 'src/components/models/user';
 
 const columns = [
   {
@@ -50,7 +49,7 @@ export default {
   setup() {
     let userList = ref<IUser[]>([]);
     async function getUserList() {
-      userList.value = await listUser();
+      // userList.value = await listUser();
     }
     onMounted(() => {
       void getUserList();

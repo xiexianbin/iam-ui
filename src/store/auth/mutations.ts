@@ -1,11 +1,17 @@
-import { IUser } from 'src/components/models/users';
+import { IAccount } from 'src/components/models/account';
 
 import { MutationTree } from 'vuex';
 import { IAuthState } from './state';
 
 const mutation: MutationTree<IAuthState> = {
-  setUser (state: IAuthState, user: IUser) {
-    state.user = user
+  setAccount (state: IAuthState, account: IAccount | null) {
+    if (account != null) {
+      account.user = account.data
+      account.organization = account.data2
+      state.account = account
+    } else {
+      state.account = null
+    }
   },
   signIn (state: IAuthState) {
     state.isSignin = true

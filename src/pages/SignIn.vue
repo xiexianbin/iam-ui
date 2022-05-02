@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="row justify-center q-pa-md">
+    <div class="row justify-center items-center q-pa-md">
       <q-card class="col-md-3 col-xs-12">
         <q-card-section>
           <div class="text-h5 q-mt-sm q-mb-xs">Sign in</div>
@@ -66,43 +66,22 @@
             </div>
           </q-form>
           <q-separator class="q-my-md" />
-          <div class="q-gutter-md q-gutter-sm">
+          <div class="q-gutter-md q-gutter-sm" v-for="(k, i) in applicationRef.providers" :key="i">
             <q-btn
               round
-              class="glossy"
-              color="black"
-              icon="mdi-github"
+              :color="thirdPartLogo[k.provider.type].color"
+              :icon="thirdPartLogo[k.provider.type].icon"
               size="sm"
               type="a"
-              href="/auth/github/redirect?redirect="
+              v-if='k.provider.category === "OAuth"' :key='k.provider.clientId'
+              :href='getAuthUrl(applicationRef, k.provider, "signup")'
             />
-            <q-btn
-              round
-              class="glossy"
-              color="black"
-              icon="mdi-qqchat"
-              size="sm"
-              type="a"
-              href="https://qq.com"
-            />
-            <q-btn
-              round
-              class="glossy"
-              color="green"
-              icon="mdi-wechat"
-              size="sm"
-              type="a"
-              href="https://wechat.com"
-            />
-            <q-btn
-              round
-              class="glossy"
-              color="blue"
-              icon="mdi-google"
-              size="sm"
-              type="a"
-              href="https://google.com"
-            />
+            <a v-else-if='k.provider.category === "SAML"'>
+              SAML
+            </a>
+            <a v-else :href='getAuthUrl(application, k.provider, "signup")'>
+              {{k.provider.name}}
+            </a>
           </div>
         </q-card-section>
       </q-card>
@@ -110,12 +89,35 @@
   </q-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { signIn } from 'src/rest/users';
+<script lang='ts'>
+import { defineComponent, onMounted, ref, reactive } from 'vue';
+import * as ApplicationBackend from 'src/backend/ApplicationBackend'
+import { IApplication } from 'src/components/models/application';
+import { getAuthUrl } from 'src/auth/Provider';
+import { IMap } from 'src/components/models/base';
+
+const thirdPartLogo = {
+  GitHub: {
+    color: 'black',
+    icon: 'mdi-github'
+  },
+  Google: {
+    color: 'blue',
+    icon:'mdi-google'
+  },
+  QQ: {
+    color: 'black',
+    icon: 'mdi-qqchat'
+  },
+  Wechat: {
+    color: 'black',
+    icon: 'mdi-wechat'
+  },
+} as IMap;
 
 export default defineComponent({
   name: 'Signin',
+  components: {  },
   data() {
     return {
       model: {
@@ -125,38 +127,93 @@ export default defineComponent({
       },
       isPassword: true,
       submitLoading: false,
+
+      // classes: this,
+
+      // applicationName:
+      //   this.applicationName !== undefined
+      //     ? this.applicationName
+      //     : this.match === undefined
+      //     ? null
+      //     : this.match.params.applicationName,
+      // owner:
+      //   this.owner !== undefined
+      //     ? this.owner
+      //     : this.match === undefined
+      //     ? null
+      //     : this.match.params.owner,
+      // application: null,
+      // mode:
+      //   this.mode !== undefined
+      //     ? this.mode
+      //     : this.match === undefined
+      //     ? null
+      //     : this.match.params.mode,
+
+    };
+  },
+  setup() {
+    let type = 'cas';
+    const typeRef = ref(type);
+    let applicationName = 'app-built-in'
+    const applicationNameRef = ref(applicationName);
+    const owner = '';
+    let application: IApplication = {} as IApplication;
+    let applicationRef = ref<IApplication>(application);
+    let mode = '';
+    const isCodeSignin = ref(false);
+    const msg = ref(null);
+    const username = ref(null);
+    const validEmailOrPhone = ref(null);
+    const validEmail = ref(null);
+    const validPhone = ref(null);
+
+    async function getApplication() {
+      if (applicationName === null) {
+        return
+      }
+
+      void await ApplicationBackend.getApplication('admin', applicationName).then(
+        app => {
+          application = app
+          applicationRef.value = reactive(app)
+        }
+      )
+    }
+
+    onMounted(async () => {
+      if (type === 'login' || type === 'cas') {
+        await getApplication()
+      // } else if (type === 'code') {
+      //   getApplicationLogin()
+      // } else if (type === 'saml') {
+      //   getSamlApplication()
+      } else {
+        console.log('error', `Unknown authentication type: ${type}`)
+      }
+    });
+
+    return {
+      thirdPartLogo,
+      typeRef,
+      applicationNameRef,
+      // owner,
+      applicationRef,
+      // mode,
+      isCodeSignin,
+      msg,
+      username,
+      validEmailOrPhone,
+      validEmail,
+      validPhone,
+
+      getAuthUrl,
     };
   },
   methods: {
     async onSubmit() {
-      this.submitLoading = false;
-
-      if (!this.model.accept) {
-        this.$q.notify({
-          color: 'warning',
-          message: 'Please accept license and terms',
-        });
-        return;
-      }
-      this.$q.loading.show({
-        message: 'Logging...',
-      });
-
-      await signIn(this.model)
-        .then((resp) => {
-          console.log('generate token success, token is:', resp.token);
-          void this.$store.dispatch('user/asyncSetUser', resp.token);
-          console.log(this.model.email, 'signin success.');
-          this.$q.notify({
-            message: 'Sign in success.',
-          });
-        })
-        .catch((err) => {
-          console.log('signin err:', err);
-        });
-      this.submitLoading = false;
-      this.$q.loading.hide();
+      console.log('signup')
     },
-  },
+  }
 });
 </script>

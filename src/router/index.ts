@@ -1,4 +1,3 @@
-import { Cookies } from 'quasar';
 import { route } from 'quasar/wrappers';
 import {
   createMemoryHistory,
@@ -8,6 +7,8 @@ import {
 } from 'vue-router';
 import { StateInterface } from '../store';
 import routes from './routes';
+import * as AuthBackend from 'src/auth/AuthBackend'
+import { goToLink } from 'src/Setting';
 
 /*
  * If not building with SSR mode, you can
@@ -36,21 +37,19 @@ export default route<StateInterface>(function ({ store } /* { store, ssrContext 
   });
 
   // router Guard
-  Router.beforeEach((to, from, next) => {
-    // if current status is sign out, and localStorage has token, then auto sign in
-    if (!store.state.auth.isSignin && localStorage.getItem('token')) {
-      console.log('localStorage is valid, auto sign in.');
-      void store.dispatch('user/asyncSetUser', localStorage.getItem('token'));
+  Router.beforeEach(async (to, from, next) => {
+    // if current status is sign out, and Cookies has iam_session_id, then auto sign in
+    if (!store.state.auth.isSignin && !to.meta.isPublic) {
+      console.log('not signin, try auto sign in...');
+      await AuthBackend.getAccount('').then((resp) => {
+        if (resp.status === 'error') {
+          console.log('not signin', resp)
+          goToLink('/signin')
+        } else {
+          void store.dispatch('auth/setAccount', resp);
+        }
+      })
     }
-
-    // get token from cookies
-    if (!store.state.auth.isSignin && !to.meta.isPublic && Cookies.has('token')) {
-      const token = Cookies.get('token')
-      console.log('jwt is:', token)
-      void store.dispatch('auth/asyncSetUser', token);
-    }
-
-    // guard token
 
     next();
   });
