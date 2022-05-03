@@ -72,5 +72,5 @@ export interface IUser {
   custom: string;
 
   ldap: string;
-  properties: any; // Map[string]string
+  properties: Record<string, unknown>;
 }

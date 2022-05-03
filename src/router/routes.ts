@@ -46,6 +46,28 @@ const routes: RouteRecordRaw[] = [
       }],
   },
   {
+    path: '/signin/oauth/authorize',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/SignInOAuth.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
+    path: '/signup/oauth/authorize',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/SignUpOAuth.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
     path: '/callback',
     component: () => import('layouts/SampleLayout.vue'),
     children: [{
@@ -91,28 +113,7 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'organizations', component: () => import('src/pages/manager/organizations/Index.vue'),
-        meta: {
-          isPublic: false,
-          role: 'admin'
-        }
-      },
-      {
-        path: 'users', component: () => import('src/pages/manager/users/Index.vue'),
-        meta: {
-          isPublic: false,
-          role: 'admin'
-        }
-      },
-      {
         path: 'providers', component: () => import('src/pages/manager/providers/Index.vue'),
-        meta: {
-          isPublic: false,
-          role: 'admin'
-        }
-      },
-      {
-        path: 'applications', component: () => import('src/pages/manager/applications/Index.vue'),
         meta: {
           isPublic: false,
           role: 'admin'

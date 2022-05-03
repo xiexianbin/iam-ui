@@ -1,5 +1,5 @@
 import { IOrganization } from './organization';
-import { IProvider } from './provider';
+import { IProviderItem } from './providerItem';
 import { ISignupItem } from './signupItem';
 
 export interface IApplication {
@@ -17,14 +17,14 @@ export interface IApplication {
   enableSignUp: boolean;
   enableSigninSession: boolean;
   enableCodeSignin: boolean;
-  providers: IProvider[];
+  providers: IProviderItem[];
   signupItems: ISignupItem[];
   grantTypes: string[];
   organizationObj: IOrganization;
 
   clientId: string;
   clientSecret: string;
-  redirectUris: any[];
+  redirectUris: string[];
   tokenFormat: string;
   expireInHours: number;
   refreshExpireInHours: number;

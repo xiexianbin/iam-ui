@@ -10,7 +10,7 @@ export interface IOrganization {
   passwordSalt: string;
   phonePrefix: string;
   defaultAvatar: string;
-  tags: any[];
+  tags: string[];
   masterPassword: string;
   enableSoftDeletion: boolean;
   isProfilePublic: boolean;

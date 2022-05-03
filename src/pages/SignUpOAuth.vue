@@ -10,12 +10,12 @@ import SingInC from 'components/SignInC.vue'
 import * as Setting from 'src/Setting'
 
 export default defineComponent({
-  name: 'SignIn',
+  name: 'SignUpOAuth',
   components: {SingInC},
   setup() {
     const applicationName = ref(Setting.ApplicationName)
-    const type= ref('login')
-    const mode= ref('signin')
+    const type= ref('code')
+    const mode= ref('signup')
     return {
       applicationName,
       type,

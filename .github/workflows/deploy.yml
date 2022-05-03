@@ -11,7 +11,7 @@ jobs:
         if: ${{ !env.ACT }}
         with:
           ref: 'main'
-          token: '${{ secrets.PAT }}'
+          token: '${{ secrets.TOKEN }}'
           fetch-depth: '1'
           lfs: 'true'
 
@@ -30,14 +30,16 @@ jobs:
           tree dist/spa
 
       - name: Checkout CDN Cache config
+        if: github.ref == 'refs/heads/main'
         uses: actions/checkout@v2
         with:
           repository: xiexianbin/configs.xiexianbin.cn
           ref: 'cdn-cache'
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.TOKEN }}
           path: configs.xiexianbin.cn
 
       - name: Sync code to CDN
+        if: github.ref == 'refs/heads/main'
         uses: x-actions/go-sync@v1.1.0
         env:
           CDNTYPE: 'aliyun'
@@ -50,6 +52,7 @@ jobs:
           SUB_DIR: 'dist/spa'
 
       - name: Push CDN Cache to github
+        if: github.ref == 'refs/heads/main'
         uses: x-actions/git-push@v1
         env:
           GITHUB_EMAIL: 'me@xiexianbin.cn'

@@ -42,7 +42,7 @@ const columns = [
 ];
 
 export default {
-  name: 'UsersIndex',
+  name: 'TokenIndex',
   data() {
     return {};
   },

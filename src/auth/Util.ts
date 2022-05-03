@@ -12,6 +12,11 @@ export function showMessage(type: string, text: string) {
       message: text,
       color: 'info'
     })
+  } else if (type === 'error') {
+    Notify.create({
+      message: text,
+      color: 'error'
+    })
   } else {
     Notify.create({
       message: text,
@@ -20,10 +25,11 @@ export function showMessage(type: string, text: string) {
   }
 }
 
-function getRefinedValue(value: null){
+function getRefinedValue(value: string | null){
   return (value === null) ? '' : value
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getOAuthGetParameters(params: any) {
   const queries = (params !== undefined) ? params : new URLSearchParams(window.location.search);
   const clientId = getRefinedValue(queries.get('client_id'));
