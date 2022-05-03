@@ -10,7 +10,6 @@ jobs:
       - uses: actions/checkout@v2
         if: ${{ !env.ACT }}
         with:
-          ref: 'main'
           token: '${{ secrets.TOKEN }}'
           fetch-depth: '1'
           lfs: 'true'
