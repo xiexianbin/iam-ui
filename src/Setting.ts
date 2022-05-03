@@ -3,12 +3,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { IApplication } from './components/models/application';
 import { IMap } from './components/models/base';
 import { IProviderItem } from './components/models/providerItem';
+import { IUser } from './components/models/user';
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 export const ServerUrl = process.env.API;
 export const SessionName = 'iam_session_id';
+export const ApplicationName = 'app-built-in';
 
 // export const StaticBaseUrl = 'https://cdn.jsdelivr.net/gh/casbin/static';
 export const StaticBaseUrl = '';
@@ -106,7 +109,7 @@ export function getFullServerUrl() {
   return fullServerUrl;
 }
 
-export function isProviderVisible(providerItem: { provider: { category: string; type: string; } | null | undefined; }) {
+export function isProviderVisible(providerItem: IProviderItem) {
   if (providerItem.provider === undefined || providerItem.provider === null) {
     return false;
   }
@@ -142,11 +145,11 @@ export function isProviderPrompted(providerItem: IProviderItem) {
   return isProviderVisible(providerItem) && providerItem.prompted;
 }
 
-export function getAllPromptedProviderItems(application: any) {
-  return application.providers.filter((providerItem: any) => isProviderPrompted(providerItem));
+export function getAllPromptedProviderItems(application: IApplication) {
+  return application.providers.filter((providerItem: IProviderItem) => isProviderPrompted(providerItem));
 }
 
-export function getSignupItem(application: any, itemName: string) {
+export function getSignupItem(application: IApplication, itemName: string) {
   const signupItems = application.signupItems?.filter((signupItem: { name: string; }) => signupItem.name === itemName);
   if (signupItems.length === 0) {
     return null;
@@ -202,7 +205,7 @@ export function isValidTaxId(taxId: string) {
   return false;
 }
 
-export function isAffiliationPrompted(application: any) {
+export function isAffiliationPrompted(application: IApplication) {
   const signupItem = getSignupItem(application, 'Affiliation');
   if (signupItem === null) {
     return false;
@@ -211,7 +214,7 @@ export function isAffiliationPrompted(application: any) {
   return signupItem.prompted;
 }
 
-export function hasPromptPage(application: any) {
+export function hasPromptPage(application: IApplication) {
   const providerItems = getAllPromptedProviderItems(application);
   if (providerItems.length !== 0) {
     return true;
@@ -220,7 +223,7 @@ export function hasPromptPage(application: any) {
   return isAffiliationPrompted(application);
 }
 
-function isAffiliationAnswered(user: any, application: any) {
+function isAffiliationAnswered(user: IUser, application: IApplication) {
   if (!isAffiliationPrompted(application)) {
     return true;
   }
@@ -231,7 +234,7 @@ function isAffiliationAnswered(user: any, application: any) {
   return user.affiliation !== '';
 }
 
-function isProviderItemAnswered(user: any, application: any, providerItem: any) {
+function isProviderItemAnswered(user: any, application: IApplication, providerItem: IProviderItem) {
   if (user === null) {
     return false;
   }
@@ -241,7 +244,11 @@ function isProviderItemAnswered(user: any, application: any, providerItem: any) 
   return linkedValue !== undefined && linkedValue !== '';
 }
 
-export function isPromptAnswered(user: any, application: any) {
+export function isPromptAnswered(user: IUser | undefined, application: IApplication) {
+  if (user === undefined) {
+    return false
+  }
+
   if (!isAffiliationAnswered(user, application)) {
     return false;
   }
@@ -296,10 +303,6 @@ export function goToLinkSoft(ths: { props: { history: any[]; }; }, link: string)
   }
 
   ths.props.history.push(link);
-}
-
-export function showMessage(type: string, text: any) {
-  console.log(type, text)
 }
 
 export function isAdminUser(account: { owner: string; isGlobalAdmin: boolean; } | null | undefined) {
@@ -412,28 +415,6 @@ export function getAvatarColor(s: any) {
   }
   return colorList[random % 4];
 }
-
-// tobe deleted
-// export function getProviderLogoURL(provider: { category: string; type: string; customLogo: any; }) {
-//   if (provider.category === 'OAuth') {
-//     if (provider.type === 'Custom') {
-//       return provider.customLogo;
-//     }
-//     return `${StaticBaseUrl}/img/social_${provider.type.toLowerCase()}.png`;
-//   } else {
-//     // return OtherProviderInfo[provider.category][provider.type].logo;
-//     return ''
-//   }
-// }
-
-// tobe deleted
-// export function getProviderLogo(provider: any) {
-//   const idp = provider.type.toLowerCase().trim().split(' ')[0];
-//   const url = getProviderLogoURL(provider);
-//   return (
-//     '<img width={30} height={30} src={url} alt={idp} />'
-//   )
-// }
 
 export function getProviderTypeOptions(category: string) {
   if (category === 'OAuth') {
@@ -643,10 +624,11 @@ export function getNewRowNameForTable(table: { filter: (arg0: (row: any) => any)
 }
 
 export function getTagColor(s: any) {
+  console.log('function getTagColor', s)
   return 'processing';
 }
 
-export function getTags(tags: any[]) {
+export function getTags(tags: string[]) {
   // let res = [];
   // if (!tags) return res;
   // tags.forEach((tag: any, i: any) => {
@@ -657,14 +639,12 @@ export function getTags(tags: any[]) {
   //   );
   // });
   // return res;
-  console.log('function getTags')
+  console.log('function getTags', tags)
   return ''
 }
 
-export function getApplicationOrgName(application: any) {
-  // return `${application?.organizationObj.owner}/${application?.organizationObj.name}`;
-  console.log('${application.organizationObj.owner}/${application.organizationObj.name}');
-  return 'owner/name'
+export function getApplicationOrgName(application: IApplication) {
+  return `${application?.organizationObj.owner}/${application?.organizationObj.name}`;
 }
 
 export function getRandomName() {
@@ -782,3 +762,22 @@ export function getSyncerTableColumns(syncer: { type: any; }) {
       return []
   }
 }
+
+export const ThirdPartLogo = {
+  GitHub: {
+    color: 'black',
+    icon: 'mdi-github'
+  },
+  Google: {
+    color: 'blue',
+    icon:'mdi-google'
+  },
+  QQ: {
+    color: 'black',
+    icon: 'mdi-qqchat'
+  },
+  Wechat: {
+    color: 'black',
+    icon: 'mdi-wechat'
+  },
+};

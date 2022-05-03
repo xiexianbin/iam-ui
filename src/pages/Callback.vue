@@ -18,7 +18,9 @@ export default defineComponent({
   name: 'CallBack',
   setup() {
     const $q = useQuasar()
-    $q.loading.show()
+    $q.loading.show({
+      message: 'Logging...',
+    });
 
     function getInnerParams() {
       // For example, for Casbin-OA, realRedirectUri = 'http://localhost:9000/login'

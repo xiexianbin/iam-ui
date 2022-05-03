@@ -1,6 +1,8 @@
 <template>
   <q-page padding>
-    <p>已退出，3秒后跳转 <a href="/signin">signin</a>...</p>
+    <div class="row justify-center q-pa-md">
+      <p>已退出，3秒后跳转 <a href="/signin">signin</a>...</p>
+    </div>
   </q-page>
 </template>
 
