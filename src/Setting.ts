@@ -244,8 +244,8 @@ function isProviderItemAnswered(user: any, application: IApplication, providerIt
   return linkedValue !== undefined && linkedValue !== '';
 }
 
-export function isPromptAnswered(user: IUser | undefined, application: IApplication) {
-  if (user === undefined) {
+export function isPromptAnswered(user: IUser | null | undefined, application: IApplication) {
+  if (user === undefined || user === null) {
     return false
   }
 

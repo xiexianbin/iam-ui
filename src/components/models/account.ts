@@ -7,11 +7,11 @@ export interface IAccount {
   msg: string;
   sub: string;
   name: string;
-  data?: IUser;
-  data2?: IOrganization;
+  data?: IUser | null;
+  data2?: IOrganization | null;
 
-  user?: IUser;
-  organization?: IOrganization;
+  user?: IUser | null;
+  organization?: IOrganization | null;
 }
 
 export interface IResponse {

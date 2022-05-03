@@ -3,7 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/AuthLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
       component: () => import('pages/Index.vue'),
@@ -91,7 +91,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/user',
-    component: () => import('layouts/AuthLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '', component: () => import('src/pages/user/Index.vue'),
@@ -99,7 +99,22 @@ const routes: RouteRecordRaw[] = [
           isPublic: false,
           role: 'user'
         }
-      }],
+      },
+      {
+        path: 'tokens', component: () => import('src/pages/user/tokens/Index.vue'),
+        meta: {
+          isPublic: false,
+          role: 'admin'
+        }
+      },
+      {
+        path: 'records', component: () => import('src/pages/user/records/Index.vue'),
+        meta: {
+          isPublic: false,
+          role: 'admin'
+        }
+      }
+    ],
   },
   {
     path: '/manager',

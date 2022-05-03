@@ -1,95 +1,144 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 <template>
   <div class="row justify-center items-center q-pa-md">
-    <q-card class="col-md-3 col-xs-12">
-      <q-card-section>
-        <div class="text-h5 q-mt-sm q-mb-xs">Sign in</div>
-      </q-card-section>
 
-      <q-separator />
+    <div class="column items-center">
+      <div class="col q-pb-md">
+        <q-card class="col-sm-10 col-md-4 card-width" v-if="signedInBox">
+          <q-card-section>
+            <div class="text-h5 q-mt-sm q-mb-xs">Continue with</div>
+          </q-card-section>
 
-      <q-card-section>
-        <q-form @submit="onSubmit" class="q-gutter-md">
-          <q-input
-            v-model="username"
-            label="Email *"
-            type="model.email"
-            hint="Email Address is login Account"
-            lazy-rules
-            :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Please Input Email Address',
-            ]"
-          />
-
-          <q-input
-            v-model="password"
-            label="Password *"
-            :type="isPassword ? 'password' : 'text'"
-            hint="Pleast input your Password"
-            :rules="[
-              (val) =>
-                (val && val !== '' && val.length >= 6) ||
-                'Please Password must more then 6',
-            ]"
-          >
-            <template v-slot:append>
-              <q-icon
-                :name="isPassword ? 'visibility_off' : 'visibility'"
-                class="cursor-pointer"
-                @click="isPassword = !isPassword"
+          <q-separator />
+          <q-card-section>
+            <div>
+              <!-- -{{account}}- <br>
+              -{{account.data.name}}- <br>
+              -{{account.data.name ? account.data !== undefined : 'abc'}}- <br>
+              <br>
+              -{{accountRef}}- <br>
+              -{{accountRef.value ? accountRef.value !== undefined : ''}}- <br> -->
+              <q-btn
+                v-bind:label="'Sign in with ' + account.data.name + '(' + account.data.displayName + ')'"
+                type="button"
+                color="primary"
+                :loading="submitLoading"
+                @click="onReSignin()"
               />
-            </template>
-          </q-input>
+            </div>
+            <q-separator class="q-my-md" />
+            <div>
+              <span>Or sign in with another account</span>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
 
-          <q-toggle
-            v-model="model.accept"
-            label="I accept the license and terms"
-          />
+      <div class="col q-pb-md" v-if="msg === ''">
+        <q-card class="col-sm-10 col-md-4 card-width">
+          <q-card-section>
+            <div class="text-h5 q-mt-sm q-mb-xs">Sign in</div>
+          </q-card-section>
 
-          <div>
-            <q-btn
-              label="Sign in"
-              type="submit"
-              color="primary"
-              :loading="submitLoading"
-            />
-            No account yet?
-            <router-link class="text-primary" to="/signup">
-              Signup
-            </router-link>
-          </div>
-          <div>
-            <router-link class="text-primary" to="/forgot">
-              Forgot password?
-            </router-link>
-          </div>
-        </q-form>
-        <q-separator class="q-my-md" />
-        <div class="q-gutter-md q-gutter-sm" v-for="(k, i) in applicationRef.providers" :key="i">
-          <q-btn
-            round
-            :color="thirdPartLogo[k.provider.type].color"
-            :icon="thirdPartLogo[k.provider.type].icon"
-            size="sm"
-            type="a"
-            v-if='k.provider.category === "OAuth"' :key='k.provider.clientId'
-            :href='getAuthUrl(applicationRef, k.provider, "signup")'
-          />
-          <a v-else-if='k.provider.category === "SAML"'>
-            SAML
-          </a>
-          <a v-else :href='getAuthUrl(application, k.provider, "signup")'>
-            {{k.provider.name}}
-          </a>
-        </div>
-      </q-card-section>
-    </q-card>
+          <q-separator v-if="applicationRef.enablePassword" />
+          <q-card-section>
+            <q-form @submit="onSignin" class="q-gutter-md" v-if="applicationRef.enablePassword">
+              <q-input
+                v-model="username"
+                label="Email *"
+                type="model.email"
+                hint="Email Address is login Account"
+                lazy-rules
+                :rules="[
+                  (val) =>
+                    (val && val.length > 0) || 'Please Input Email Address',
+                ]"
+              />
+
+              <q-input
+                v-model="password"
+                label="Password *"
+                :type="isPassword ? 'password' : 'text'"
+                hint="Pleast input your Password"
+                :rules="[
+                  (val) =>
+                    (val && val !== '' && val.length >= 6) ||
+                    'Please Password must more then 6',
+                ]"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPassword ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPassword = !isPassword"
+                  />
+                </template>
+              </q-input>
+
+              <q-toggle
+                v-model="model.accept"
+                label="I accept the license and terms"
+              />
+
+              <div>
+                <q-btn
+                  label="Sign in"
+                  type="submit"
+                  color="primary"
+                  :loading="submitLoading"
+                />
+                No account yet?
+                <router-link class="text-primary" to="/signup" :disabled="!applicationRef.enableSignUp">
+                  Signup
+                </router-link>
+              </div>
+              <div>
+                <router-link class="text-primary" to="/forgot">
+                  Forgot password?
+                </router-link>
+              </div>
+            </q-form>
+            <q-separator class="q-my-md" />
+            <div class="q-gutter-md q-gutter-sm" v-for="(k, i) in applicationRef.providers" :key="i">
+              <q-btn
+                round
+                :color="thirdPartLogo[k.provider.type].color"
+                :icon="thirdPartLogo[k.provider.type].icon"
+                size="sm"
+                type="a"
+                v-if='k.provider.category === "OAuth"' :key='k.provider.clientId'
+                :href='getAuthUrl(applicationRef, k.provider, "signup")'
+              />
+              <a v-else-if='k.provider.category === "SAML"'>
+                SAML
+              </a>
+              <a v-else :href='getAuthUrl(application, k.provider, "signup")'>
+                {{k.provider.name}}
+              </a>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+
+      <div class="col q-pb-md" v-if="msg !== ''">
+        <q-card class="col-sm-10 col-md-4 card-width">
+          <q-card-section>
+            <div class="text-h5 q-mt-sm q-mb-xs text-negative">Errors</div>
+          </q-card-section>
+
+          <q-separator />
+          <q-card-section>
+            <div>
+              <span class="text-negative">{{ msg }}</span>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted, ref, reactive } from 'vue';
+import { defineComponent, onMounted, PropType, ref, reactive } from 'vue';
 import { useQuasar } from 'quasar'
 
 import * as ApplicationBackend from 'src/backend/ApplicationBackend'
@@ -97,6 +146,7 @@ import * as AuthBackend from 'src/auth/AuthBackend'
 import * as Setting from 'src/Setting'
 import * as Util from 'src/auth/Util'
 import { getAuthUrl } from 'src/auth/Provider';
+import { IAccount, IResponse } from './models/account';
 import { IApplication } from 'src/components/models/application';
 
 export default defineComponent({
@@ -114,13 +164,17 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    account: {
+      type: Object as PropType<IAccount>,
+      default: {} as IAccount,
+      required: true,
+    }
   },
   data() {
     return {
       model: {
         accept: false,
       },
-
     };
   },
   setup(props) {
@@ -136,8 +190,10 @@ export default defineComponent({
     let application: IApplication = {} as IApplication;
     let applicationRef = ref<IApplication>(application);
     let mode = ref(props.mode);
+    const accountRef = ref(props.account);
+    const signedInBox = ref(false);
     const isCodeSignin = false;
-    const msg = null;
+    const msg = ref('');
     const username = ref('');
     const password = ref('');
     const validEmailOrPhone = false;
@@ -146,9 +202,18 @@ export default defineComponent({
 
     async function getApplicationLogin() {
       const oAuthParams = Util.getOAuthGetParameters(undefined)
-      void await AuthBackend.getApplicationLogin(oAuthParams).then(app => {
-        application = app
-        applicationRef.value = reactive(app)
+      void await AuthBackend.getApplicationLogin(oAuthParams).then(res => {
+        console.log('res--', res)
+        if (res.name !== '') {
+          application = res as IApplication
+          applicationRef.value = reactive(res as IApplication)
+        } else {
+          res = res as IResponse
+          Util.showMessage('error', res.msg);
+          application = res.data as IApplication
+          applicationRef.value = reactive(res.data as IApplication)
+          msg.value = res.msg
+        }
       })
     }
 
@@ -243,11 +308,11 @@ export default defineComponent({
               const concatChar = oAuthParams?.redirectUri?.includes('?') ? '&' : '?'
 
               if (Setting.hasPromptPage(application)) {
-                void AuthBackend.getAccount('').then(account => {
+                void AuthBackend.getAccount('').then(res => {
                   if (res.status === 'ok') {
-                    // onUpdateAccount(account)
+                    // onUpdateAccount(res)
 
-                    if (Setting.isPromptAnswered(account.data, application)) {
+                    if (Setting.isPromptAnswered(res.data, application)) {
                       Setting.goToLink(
                         `${oAuthParams.redirectUri}${concatChar}code=${code}&state=${oAuthParams.state}`
                       )
@@ -324,7 +389,33 @@ export default defineComponent({
     //   }
     // }
 
-    function onSubmit() {
+    function renderSigned() {
+      if (props.account === null || props.account.status === 'error') {
+        signedInBox.value = false
+        return null;
+      }
+      let application = getApplicationObj()
+      if (props.account.data?.owner !== application.organization) {
+        signedInBox.value = false
+        return null;
+      }
+      signedInBox.value = true
+
+      const params = new URLSearchParams(window.location.search);
+      let silentSignin = params.get('silentSignin');
+      if (silentSignin !== null) {
+        if (window !== window.parent) {
+          const message = {tag: 'Casdoor', type: 'SilentSignin', data: 'signing-in'};
+          window.parent.postMessage(message, '*');
+        }
+
+        let values = {} as Record<string, unknown>;
+        values['application'] = application.name;
+        onFinish(values);
+      }
+    }
+
+    function onSignin() {
       const values = {
         application: application.name,
         organization: application.organization,
@@ -365,6 +456,13 @@ export default defineComponent({
       $q.loading.hide();
     }
 
+    function onReSignin() {
+      const values = {
+        application: application.name
+      }
+      onFinish(values);
+    }
+
     onMounted(async () => {
       if (type.value === 'login' || type.value === 'cas') {
         await getApplication()
@@ -375,6 +473,8 @@ export default defineComponent({
       } else {
         console.log('error', `Unknown authentication type: ${type.value}`)
       }
+
+      renderSigned();
     });
 
     return {
@@ -384,6 +484,8 @@ export default defineComponent({
       thirdPartLogo: Setting.ThirdPartLogo,
       typeRef,
       applicationRef,
+      accountRef,
+      signedInBox,
       msg,
       username,
       password,
@@ -392,8 +494,14 @@ export default defineComponent({
       validPhone,
 
       getAuthUrl,
-      onSubmit,
+      onSignin,
+      onReSignin,
     };
   }
 });
 </script>
+
+<style lang="sass" scoped>
+.card-width
+  width: 450px
+</style>

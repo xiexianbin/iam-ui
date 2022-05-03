@@ -28,10 +28,6 @@
           no-wrap
         "
       >
-        <router-link to="/manager/organizations">Organizations</router-link>
-        <router-link to="/manager/users">Users</router-link>
-        <router-link to="/manager/providers">Providers</router-link>
-        <router-link to="/manager/applications">Applications</router-link>
         <router-link to="/manager/tokens">Tokens</router-link>
         <router-link to="/manager/records">Records</router-link>
         <router-link to=""> API </router-link>
@@ -48,13 +44,8 @@
           no-wrap
         "
       >
-        <router-link to="/user/organizations">Organizations</router-link>
-        <router-link to="/user/users">Users</router-link>
-        <router-link to="/user/providers">Providers</router-link>
-        <router-link to="/user/applications">Applications</router-link>
         <router-link to="/user/tokens">Tokens</router-link>
         <router-link to="/user/records">Records</router-link>
-        <router-link to=""> API </router-link>
       </div>
 
       <q-space />
@@ -130,7 +121,7 @@
               <q-item clickable class="layout__menu-link">
                 <q-item-section>Your profile</q-item-section>
               </q-item>
-              <q-item clickable class="layout__menu-link">
+              <!-- <q-item clickable class="layout__menu-link">
                 <q-item-section>Your repositories</q-item-section>
               </q-item>
               <q-item clickable class="layout__menu-link">
@@ -148,7 +139,7 @@
               </q-item>
               <q-item clickable class="layout__menu-link">
                 <q-item-section>Settings</q-item-section>
-              </q-item>
+              </q-item> -->
               <q-item clickable class="layout__menu-link" @click="signOut">
                 <q-item-section>Sign out</q-item-section>
               </q-item>
