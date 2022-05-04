@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="row">
+    <div class="row justify-center q-pa-md">
       <router-link to="/user">user</router-link>
       <span>--</span>
       <router-link to="/manager">manager</router-link>
@@ -9,9 +9,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { goToLink } from 'src/Setting';
+import { defineComponent, onBeforeMount } from 'vue';
 
 export default defineComponent({
   name: 'PageIndex',
+  setup() {
+    onBeforeMount(() => {
+      goToLink('/user')
+    })
+  }
 });
 </script>

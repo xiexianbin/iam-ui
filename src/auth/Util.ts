@@ -10,12 +10,12 @@ export function showMessage(type: string, text: string) {
   if (type === 'success') {
     Notify.create({
       message: text,
-      color: 'info'
+      color: 'positive'
     })
   } else if (type === 'error') {
     Notify.create({
       message: text,
-      color: 'error'
+      color: 'negative'
     })
   } else {
     Notify.create({
