@@ -22,3 +22,24 @@ export interface IResponse {
   data: any;
   data2?: any;
 }
+
+export interface IHumanCheck {
+  type: string;
+  appKey: string;
+  scene: string;
+  captchaId: string;
+  captchaImage: string;
+}
+
+export interface ISignupRequestForm {
+  application: string;
+  organization: string;
+  username: string;
+  name: string;
+  password: string;
+  confirm: string;
+  email: string;
+  emailCode: string;
+  agreement: boolean;
+  phonePrefix: string;
+}

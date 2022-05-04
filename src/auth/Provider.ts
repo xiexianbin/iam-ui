@@ -127,6 +127,9 @@ export function getAuthUrl(application: IApplication, provider: IProvider, metho
   if (application === null || provider === null) {
     return '';
   }
+  if (provider.category === 'Email') {
+    return '';
+  }
 
   let endpoint: string = authInfo[provider.type].endpoint;
   const redirectUri = `${window.location.origin}/callback`;

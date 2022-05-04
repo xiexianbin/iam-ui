@@ -12,7 +12,7 @@
         flat
         no-caps
         :ripple="false"
-        to="/"
+        to="/user"
         icon="img:/icons/favicon-128x128.png"
         size="19px"
         class="q-mr-sm"
@@ -118,7 +118,7 @@
                 </q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable class="layout__menu-link">
+              <q-item clickable class="layout__menu-link" to="/user">
                 <q-item-section>Your profile</q-item-section>
               </q-item>
               <!-- <q-item clickable class="layout__menu-link">

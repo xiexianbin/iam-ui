@@ -75,7 +75,7 @@
               </q-input>
 
               <q-toggle
-                v-model="model.accept"
+                v-model="agreement"
                 label="I accept the license and terms"
               />
 
@@ -101,6 +101,7 @@
             <div class="q-gutter-md q-gutter-sm" v-for="(k, i) in applicationRef.providers" :key="i">
               <q-btn
                 round
+                class="q-my-md"
                 :color="thirdPartLogo[k.provider.type].color"
                 :icon="thirdPartLogo[k.provider.type].icon"
                 size="sm"
@@ -111,7 +112,7 @@
               <a v-else-if='k.provider.category === "SAML"'>
                 SAML
               </a>
-              <a v-else :href='getAuthUrl(application, k.provider, "signup")'>
+              <a v-else-if="getAuthUrl(applicationRef, k.provider, 'signup') !== ''" :href='getAuthUrl(applicationRef, k.provider, "signup")'>
                 {{k.provider.name}}
               </a>
             </div>
@@ -170,13 +171,6 @@ export default defineComponent({
       required: true,
     }
   },
-  data() {
-    return {
-      model: {
-        accept: false,
-      },
-    };
-  },
   setup(props) {
     const $q = useQuasar()
 
@@ -199,11 +193,11 @@ export default defineComponent({
     const validEmailOrPhone = false;
     const validEmail = false;
     const validPhone = false;
+    const agreement = ref(false);
 
     async function getApplicationLogin() {
       const oAuthParams = Util.getOAuthGetParameters(undefined)
       void await AuthBackend.getApplicationLogin(oAuthParams).then(res => {
-        console.log('res--', res)
         if (res.name !== '') {
           application = res as IApplication
           applicationRef.value = reactive(res as IApplication)
@@ -358,9 +352,6 @@ export default defineComponent({
         })
       }
     }
-    // function getSigninButton(type: string) {
-    //   return 'login:Sign in with {type}'.replace('{type}', type)
-    // }
     // function getSamlUrl(provider: any) {
     //   console.log('call getSamlUrl')
     //   // const params = new URLSearchParams(this.location.search)
@@ -423,14 +414,14 @@ export default defineComponent({
         password: password.value,
         autoSignin: true,
       }
-      // check
-      // if (!this.model.accept) {
-      //   this.$q.notify({
-      //     color: 'warning',
-      //     message: 'Please accept license and terms',
-      //   });
-      //   return;
-      // }
+      // check arguments
+      if (!arguments) {
+        $q.notify({
+          color: 'warning',
+          message: 'Please accept arguments',
+        });
+        return;
+      }
 
       submitLoading.value = true;
       $q.loading.show({
@@ -492,6 +483,7 @@ export default defineComponent({
       validEmailOrPhone,
       validEmail,
       validPhone,
+      agreement,
 
       getAuthUrl,
       onSignin,
