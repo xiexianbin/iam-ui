@@ -3,12 +3,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 <template>
   <q-page padding>
-    <!-- content -->
+    <div class="row page-wrapper justify-center q-pa-md">
+      <div class="col q-pb-md" v-if="msg !== ''">
+        <q-card class="col-sm-10 col-md-4 card-width">
+          <q-card-section>
+            <div class="text-h5 q-mt-sm q-mb-xs text-negative">Errors</div>
+          </q-card-section>
+
+          <q-separator />
+          <q-card-section>
+            <div>
+              <span class="text-negative">{{ msg }}</span>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
   </q-page>
 </template>
 
 <script>
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar'
 import * as AuthBackend from 'src/auth/AuthBackend'
 import * as Setting from 'src/Setting'
@@ -18,6 +33,8 @@ export default defineComponent({
   name: 'CallBack',
   setup() {
     const $q = useQuasar()
+    const msg = ref('');
+
     $q.loading.show({
       message: 'Logging...',
     });
@@ -134,12 +151,16 @@ export default defineComponent({
               Setting.goToLink(`${redirectUri}?SAMLResponse=${encodeURIComponent(SAMLResponse)}&RelayState=${oAuthParams.relayState}`);
             }
           } else {
+            $q.loading.hide()
             Util.showMessage('warning', res.msg)
+            msg.value = res.msg
           }
         });
     });
 
-    return {};
+    return {
+      msg,
+    };
   },
 })
 </script>

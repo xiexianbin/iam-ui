@@ -10,7 +10,7 @@ const mutation: MutationTree<IAuthState> = {
       account.organization = account.data2
       state.account = account
     } else {
-      state.account = null
+      state.account = {} as IAccount
     }
   },
   signIn (state: IAuthState) {

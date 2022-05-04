@@ -18,44 +18,56 @@
           <q-separator />
           <q-card-section class="q-pa-sm">
             <q-list class="row">
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <q-item class="col-md-12 col-sm-12 col-xs-12">
                 <q-item-section>
-                  <q-input densev-model="user_details.user_name" label="User Name"/>
+                  <q-input v-model="user.id" label="User ID" disable />
+                </q-item-section>
+                <q-item-section>
+                  <q-input v-model="user.email" label="Primary Email" disable />
                 </q-item-section>
               </q-item>
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <q-item class="col-md-12 col-sm-12 col-xs-12">
                 <q-item-section>
-                  <q-input densev-model="user_details.email" label="Email Address"/>
+                  <q-input v-model="user.name" label="Name" disable />
+                </q-item-section>
+                <q-item-section>
+                  <q-input v-model="user.displayName" label="Display Name" />
                 </q-item-section>
               </q-item>
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <q-item class="col-md-12 col-sm-12 col-xs-12">
                 <q-item-section>
-                  <q-input densev-model="user_details.first_name" label="First Name"/>
+                  <q-input v-model="user.firstName" label="First Name" />
+                </q-item-section>
+                <q-item-section>
+                  <q-input v-model="user.lastName" label="Last Name" />
                 </q-item-section>
               </q-item>
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <q-item class="col-md-12 col-sm-12 col-xs-12">
                 <q-item-section>
-                  <q-input densev-model="user_details.last_name" label="Last Name"/>
+                  <q-input v-model="user.phone" label="Phone" />
+                </q-item-section>
+              </q-item>
+              <q-item class="col-md-12 col-sm-12 col-xs-12">
+                <q-item-section>
+                  <q-input v-model="user.region" label="Region" />
+                </q-item-section>
+                <q-item-section>
+                  <q-input v-model="user.location" label="Location" />
                 </q-item-section>
               </q-item>
               <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <q-item-section>
-                  <q-input dark autogrow dense v-model="user_details.address" label="Address"/>
+                  <q-input v-model="user.address" label="Address" />
                 </q-item-section>
               </q-item>
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <q-item class="col-md-12 col-sm-12 col-xs-12">
                 <q-item-section>
-                  <q-input densev-model="user_details.city" label="City"/>
+                  <q-input v-model="user.homepage" label="Home Page" />
                 </q-item-section>
               </q-item>
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <q-item class="col-md-12 col-sm-12 col-xs-12">
                 <q-item-section>
-                  <q-input densev-model="user_details.post_code" label="Postal Code"/>
-                </q-item-section>
-              </q-item>
-              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <q-item-section>
-                  <q-input dark type="textarea" dense v-model="user_details.about" label="About"/>
+                  <q-input v-model="user.createdTime" label="Created Time" disable />
                 </q-item-section>
               </q-item>
             </q-list>
@@ -71,39 +83,60 @@
           </q-card-section>
           <q-separator />
           <q-card-section class="q-pa-sm row">
-            <q-item class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              <q-item-section>
-                Current Password
-              </q-item-section>
-            </q-item>
             <q-item class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
               <q-item-section>
-                <q-input type="password" denseoutlined round
-                  v-model="password_dict.current_password"
-                  label="Current Password"/>
-              </q-item-section>
-            </q-item>
-            <q-item class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              <q-item-section>
-                New Password
-              </q-item-section>
-            </q-item>
-            <q-item class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-              <q-item-section>
-                <q-input type="password" denseoutlined round v-model="password_dict.new_password"
-                  label="New Password"/>
-              </q-item-section>
-            </q-item>
-            <q-item class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              <q-item-section>
-                Confirm New Password
-              </q-item-section>
-            </q-item>
-            <q-item class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-              <q-item-section>
-                <q-input type="password" denseoutlined round
-                  v-model="password_dict.confirm_new_password"
-                  label="Confirm New Password"/>
+                <q-input
+                  v-model="password"
+                  label="Old Password *"
+                  :type="isPassword ? 'password' : 'text'"
+                  hint="Old Password"
+                >
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPassword ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPassword = !isPassword"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="password"
+                  label="Password *"
+                  :type="isPassword ? 'password' : 'text'"
+                  hint="Pleast input your Password"
+                  :rules="[
+                    (val) =>
+                      (val && val !== '' && val.length >= 6) ||
+                      'Please Password must more then 6',
+                  ]"
+                >
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPassword ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPassword = !isPassword"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="confirm"
+                  label="Confirm Password *"
+                  :type="isPassword ? 'password' : 'text'"
+                  hint="Pleast reinput your Password"
+                  :rules="[
+                    (val) => val == password || 'Password do not match',
+                  ]"
+                >
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPassword ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPassword = !isPassword"
+                    />
+                  </template>
+                </q-input>
               </q-item-section>
             </q-item>
           </q-card-section>
@@ -114,11 +147,51 @@
 
         <q-card class="q-mb-md">
           <q-card-section class="text-h6 q-pa-sm">
-            <div class="text-h6">第三方认证</div>
+            <div class="text-h6">Signup application</div>
           </q-card-section>
           <q-separator />
           <q-card-section class="q-pa-sm row">
-            github qq
+            <q-item class="col-md-12 col-sm-12 col-xs-12">
+              <div class="q-gutter-sm">
+                <q-btn
+                  flat
+                  color="primary"
+                  type="a"
+                  target="_blank"
+                  size="md"
+                  :label="application.displayName"
+                  :href="application.homepageUrl"
+                  v-for="(application, i) in applications" :key="i" />
+              </div>
+            </q-item>
+          </q-card-section>
+        </q-card>
+
+        <q-card class="q-mb-md">
+          <q-card-section class="text-h6 q-pa-sm">
+            <div class="text-h6">3rd-party logins</div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section class="q-pa-sm">
+            <div>
+              <q-list class="row">
+                <q-item class="col-md-12 col-sm-12 col-xs-12">
+                  <q-item-section v-for="(k, i) in application.providers" :key="i">
+                    <div v-if="k.provider.category === 'OAuth'">
+                      <q-btn
+                        round
+                        :color="user.github !=='' ? thirdPartLogo[k.provider.type].color : 'grey'"
+                        :icon="thirdPartLogo[k.provider.type].icon"
+                        size="sm"
+                        type="a"
+                        v-if='k.provider.category === "OAuth"' :key='k.provider.clientId'
+                        :href="user.github !=='' ? unlinkUser(k.provider.type) : getAuthUrl(application, k.provider, 'link')"
+                      />
+                    </div>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
           </q-card-section>
         </q-card>
       </div>
@@ -126,16 +199,17 @@
       <div class="col-4">
         <q-card>
           <q-card-section class="q-pa-sm">
-            <q-list class="row">
-              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <q-item-section side>
-                  <q-avatar size="100px">
-                    <img src="https://www.xiexianbin.cn/images/logo/logo-white.svg">
+            <q-list>
+              <q-item>
+                <q-item-section>
+                  <q-avatar size="120px">
+                    <img :src="user.avatar">
                   </q-avatar>
                 </q-item-section>
+              </q-item>
+              <q-item>
                 <q-item-section>
-                  <q-btn label="Add Photo" class="text-capitalize" rounded color="info"
-                    style="max-width: 120px"></q-btn>
+                  <q-btn label="Update" class="bg-primary text-white" style="max-width: 120px"></q-btn>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -146,15 +220,82 @@
   </q-page>
 </template>
 
-<script>
-import {defineComponent} from 'vue'
+<script lang="ts">
+import {defineComponent, onMounted, ref} from 'vue'
+import { useStore } from 'src/store'
+
+import * as ApplicationBackend from 'src/backend/ApplicationBackend'
+import * as AuthBackend from 'src/auth/AuthBackend'
+import * as UserBackend from 'src/backend/UserBackend'
+import * as Setting from 'src/Setting'
+import * as Util from 'src/auth/Util'
+import { getAuthUrl } from 'src/auth/Provider';
+import { IUser } from 'src/components/models/user';
+import { IApplication } from 'src/components/models/application';
 
 export default defineComponent({
   name: 'UserProfile',
   setup() {
+    const $store = useStore()
+    const account = $store.state.auth.account
+
+    const user = ref({} as IUser)
+    const applications = ref([] as IApplication[])
+    const application = ref({} as IApplication)
+
+    const isPassword = ref(true)
+    const grey = ref('grey')
+
+    async function getUserApplication() {
+      void await ApplicationBackend.getUserApplication(String(account.organization?.name), user.value.name)
+        .then((res) => {
+          application.value = res
+        });
+    }
+
+    async function getApplicationsByOrganization() {
+      void await ApplicationBackend.getApplicationsByOrganization('admin', String(account.organization?.name))
+        .then((res) => {
+          applications.value = res
+        });
+    }
+
+    async function unlinkUser(providerType: string) {
+      const body = {
+        providerType: providerType,
+      };
+      void await AuthBackend.unlink(body).then((res) => {
+          if (res.status === 'ok') {
+            Util.showMessage('success', 'Unlinked successfully');
+            Setting.goToLink('/user')
+          } else {
+            Util.showMessage('error', `Failed to unlink: ${res.msg}`);
+          }
+        });
+    }
+
+    onMounted(async () => {
+      void await UserBackend.getUser(String(account.user?.owner), String(account.user?.name)).then(resp => {
+        user.value = resp
+      })
+      void await getUserApplication()
+      void await getApplicationsByOrganization()
+    })
+
     return {
       user_details: {},
-      password_dict: {}
+      password_dict: {},
+
+      thirdPartLogo: Setting.ThirdPartLogo,
+      getAuthUrl,
+      unlinkUser,
+
+      user,
+      application,
+      applications,
+
+      isPassword,
+      grey,
     }
   }
 })
