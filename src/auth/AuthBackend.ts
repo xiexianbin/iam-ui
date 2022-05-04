@@ -35,3 +35,7 @@ export const login = async (values: any, oAuthParams: any): Promise<IResponse> =
 export const logout = async (): Promise<IResponse> => {
   return await api.post('/api/logout', {})
 }
+
+export const unlink = async (values: Record<string, string>): Promise<IResponse> => {
+  return api.post('/api/unlink', JSON.stringify(values));
+}

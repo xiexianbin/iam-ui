@@ -1,7 +1,7 @@
 import { IAccount } from 'src/components/models/account';
 
 export interface IAuthState {
-  account: IAccount | null
+  account: IAccount
   isSignin: boolean
 }
 
