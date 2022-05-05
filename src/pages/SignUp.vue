@@ -15,123 +15,127 @@
 <template>
   <q-page padding>
     <div class="row justify-center q-pa-md">
-      <q-card class="col-md-3 col-xs-12">
-        <q-card-section>
-          <div class="text-h5 q-mt-sm q-mb-xs">Sign up</div>
-        </q-card-section>
+      <div class="column">
+        <div class="col q-pb-md">
+          <q-card class="col-sm-10 col-md-4 card-width">
+            <q-card-section>
+              <div class="text-h5 q-mt-sm q-mb-xs">Sign up</div>
+            </q-card-section>
 
-        <q-separator />
+            <q-separator />
 
-        <q-card-section>
-          <q-form @submit="onSubmit" class="q-gutter-md">
-            <q-input
-              v-model="email"
-              label="Email *"
-              type="email"
-              hint="Email Address is login Account"
-              lazy-rules
-              :rules="[
-                (val) =>
-                  (val && val.length > 0) || 'Please Input Email Address',
-              ]"
-            />
+            <q-card-section>
+              <q-form @submit="onSubmit" class="q-gutter-md">
+                <q-input
+                  v-model="email"
+                  label="Email *"
+                  type="email"
+                  hint="Email Address is login Account"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val && val.length > 0) || 'Please Input Email Address',
+                  ]"
+                />
 
-            <q-input
-              v-model="username"
-              label="Your name *"
-              hint="Name and surname"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'Please Input your name',
-              ]"
-            />
+                <q-input
+                  v-model="username"
+                  label="Your name *"
+                  hint="Name and surname"
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Please Input your name',
+                  ]"
+                />
 
-            <q-input
-              v-model="emailCode"
-              label="Email Verify Code"
-              lazy-rules
-              :rules="[
-                (val) =>
-                  (val !== null && val !== '') ||
-                  'Please type your Email Verify Code',
-                (val) => val.length !== 6 || 'Please type a real age',
-              ]"
-            >
-              <template v-slot:after>
-                <q-btn
-                  flat
-                  no-caps
-                  icon="send"
-                  :label="codeVerifyLabel"
-                  :loading="verifyCodeLoading"
-                  @click="openCodeVerify"
+                <q-input
+                  v-model="emailCode"
+                  label="Email Verify Code"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val !== null && val !== '') ||
+                      'Please type your Email Verify Code',
+                    (val) => val.length !== 6 || 'Please type a real age',
+                  ]"
                 >
-                  <template v-slot:loading>
-                    <q-spinner-hourglass class="on-left" />
-                    {{ reSendVerifyCodeTime }}s
+                  <template v-slot:after>
+                    <q-btn
+                      flat
+                      no-caps
+                      icon="send"
+                      :label="codeVerifyLabel"
+                      :loading="verifyCodeLoading"
+                      @click="openCodeVerify"
+                    >
+                      <template v-slot:loading>
+                        <q-spinner-hourglass class="on-left" />
+                        {{ reSendVerifyCodeTime }}s
+                      </template>
+                    </q-btn>
                   </template>
-                </q-btn>
-              </template>
-            </q-input>
+                </q-input>
 
-            <q-input
-              v-model="password"
-              label="Password *"
-              :type="isPassword ? 'password' : 'text'"
-              hint="Pleast input your Password"
-              :rules="[
-                (val) =>
-                  (val && val !== '' && val.length >= 6) ||
-                  'Please Password must more then 6',
-              ]"
-            >
-              <template v-slot:append>
-                <q-icon
-                  :name="isPassword ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPassword = !isPassword"
+                <q-input
+                  v-model="password"
+                  label="Password *"
+                  :type="isPassword ? 'password' : 'text'"
+                  hint="Pleast input your Password"
+                  :rules="[
+                    (val) =>
+                      (val && val !== '' && val.length >= 6) ||
+                      'Please Password must more then 6',
+                  ]"
+                >
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPassword ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPassword = !isPassword"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="confirm"
+                  label="Confirm Password *"
+                  :type="isPassword ? 'password' : 'text'"
+                  hint="Pleast reinput your Password"
+                  :rules="[
+                    (val) => val == password || 'Password do not match',
+                  ]"
+                >
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPassword ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPassword = !isPassword"
+                    />
+                  </template>
+                </q-input>
+
+                <q-toggle
+                  v-model="agreement"
+                  label="I accept the license and terms"
                 />
-              </template>
-            </q-input>
 
-            <q-input
-              v-model="confirm"
-              label="Confirm Password *"
-              :type="isPassword ? 'password' : 'text'"
-              hint="Pleast reinput your Password"
-              :rules="[
-                (val) => val == password || 'Password do not match',
-              ]"
-            >
-              <template v-slot:append>
-                <q-icon
-                  :name="isPassword ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPassword = !isPassword"
-                />
-              </template>
-            </q-input>
-
-            <q-toggle
-              v-model="agreement"
-              label="I accept the license and terms"
-            />
-
-            <div>
-              <q-btn
-                label="Sign up"
-                type="submit"
-                color="primary"
-                :loading="submitLoading"
-              />
-              Have account?
-              <router-link class="text-primary" to="/signin">
-                Sign in
-              </router-link>
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
+                <div>
+                  <q-btn
+                    label="Sign up"
+                    type="submit"
+                    color="primary"
+                    :loading="submitLoading"
+                  />
+                  Have account?
+                  <router-link class="text-primary" to="/signin">
+                    Sign in
+                  </router-link>
+                </div>
+              </q-form>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
 
       <q-dialog v-model="showCodeVerify" persistent>
         <q-card class="q-dialog-plugin">
@@ -312,4 +316,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.card-width
+  width: 450px
+</style>

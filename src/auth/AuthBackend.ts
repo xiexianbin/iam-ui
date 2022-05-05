@@ -27,6 +27,9 @@ export const signup = async (values: ISignupRequestForm): Promise<IResponse> => 
   return await api.post('/api/signup', JSON.stringify(values))
 }
 
+export const getEmailAndPhone = async (values: Record<string, string>): Promise<IResponse> => {
+  return api.post('/api/get-email-and-phone', JSON.stringify(values));
+}
 
 function oAuthParamsToQuery(oAuthParams: IOAuthParams | null) {
   // login

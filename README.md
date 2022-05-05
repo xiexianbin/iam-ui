@@ -1,6 +1,25 @@
 # IAM app (iam-ui)
 
-IAM UI
+[casdoor](https://github.com/casdoor/casdoor/) web ui rewrite with vue3([quasar](https://quasar.dev/)), learning as the goal.
+
+## technology
+
+- yarn
+- vue3
+- quasar
+- TypeScript
+- axios
+- vuex
+
+## feature
+
+- signup
+- signin
+- oauth signin
+- oauth bind/unbind
+- change password
+- find password
+- change email
 
 ## Install the dependencies
 ```bash

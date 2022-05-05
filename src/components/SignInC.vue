@@ -13,11 +13,10 @@
 // limitations under the License.
 
 <template>
-  <div class="row justify-center items-center q-pa-md">
-
-    <div class="column items-center">
-      <div class="col q-pb-md">
-        <q-card class="col-sm-10 col-md-4 card-width" v-if="signedInBox">
+  <div class="row justify-center q-pa-md">
+    <div class="column">
+      <div class="q-pb-md" v-if="signedInBox">
+        <q-card class="col-sm-10 col-md-4 card-width">
           <q-card-section>
             <div class="text-h5 q-mt-sm q-mb-xs">Continue with</div>
           </q-card-section>
@@ -47,7 +46,7 @@
         </q-card>
       </div>
 
-      <div class="col q-pb-md" v-if="msg === ''">
+      <div class="q-pb-md" v-if="msg === ''">
         <q-card class="col-sm-10 col-md-4 card-width">
           <q-card-section>
             <div class="text-h5 q-mt-sm q-mb-xs">Sign in</div>
@@ -59,7 +58,7 @@
               <q-input
                 v-model="username"
                 label="Email *"
-                type="model.email"
+                type="email"
                 hint="Email Address is login Account"
                 lazy-rules
                 :rules="[
@@ -106,7 +105,7 @@
                 </router-link>
               </div>
               <div>
-                <router-link class="text-primary" to="/forgot">
+                <router-link class="text-primary" to="/forget">
                   Forgot password?
                 </router-link>
               </div>
@@ -443,19 +442,6 @@ export default defineComponent({
       });
 
       onFinish(values)
-
-      // await signIn(this.model)
-      //   .then((resp) => {
-      //     console.log('generate token success, token is:', resp.token);
-      //     void this.$store.dispatch('user/asyncSetUser', resp.token);
-      //     console.log(this.model.email, 'signin success.');
-      //     this.$q.notify({
-      //       message: 'Sign in success.',
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     console.log('signin err:', err);
-      //   });
 
       submitLoading.value = false;
       $q.loading.hide();

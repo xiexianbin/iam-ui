@@ -93,6 +93,17 @@ const routes: RouteRecordRaw[] = [
       }],
   },
   {
+    path: '/forget',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/Forget.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
     path: '/about',
     component: () => import('layouts/MainLayout.vue'),
     children: [
