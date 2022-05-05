@@ -1,3 +1,17 @@
+// Copyright 2022 me@xiexianbin.cn. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 <template>
   <q-header
     elevated
@@ -12,13 +26,13 @@
         flat
         no-caps
         :ripple="false"
-        to="/"
+        to="/user"
         icon="img:/icons/favicon-128x128.png"
         size="19px"
         class="q-mr-sm"
       />
       <div
-        v-if="$store.state.user.role === 'admin'"
+        v-if="$store.state.auth.account.user === 'admin'"
         class="
           layout__toolbar-link
           q-ml-xs q-gutter-md
@@ -28,10 +42,6 @@
           no-wrap
         "
       >
-        <router-link to="/manager/organizations">Organizations</router-link>
-        <router-link to="/manager/users">Users</router-link>
-        <router-link to="/manager/providers">Providers</router-link>
-        <router-link to="/manager/applications">Applications</router-link>
         <router-link to="/manager/tokens">Tokens</router-link>
         <router-link to="/manager/records">Records</router-link>
         <router-link to=""> API </router-link>
@@ -48,13 +58,8 @@
           no-wrap
         "
       >
-        <router-link to="/user/organizations">Organizations</router-link>
-        <router-link to="/user/users">Users</router-link>
-        <router-link to="/user/providers">Providers</router-link>
-        <router-link to="/user/applications">Applications</router-link>
         <router-link to="/user/tokens">Tokens</router-link>
         <router-link to="/user/records">Records</router-link>
-        <router-link to=""> API </router-link>
       </div>
 
       <q-space />
@@ -103,7 +108,7 @@
         <q-btn label="Sign in" v-if="!$store.state.auth.isSignin" />
         <q-btn dense flat no-wrap v-else>
           <q-avatar rounded size="20px">
-            <img :src="$store.state.user.user.avatar_url" />
+            <img :src="$store.state.auth.account.user.avatar" />
           </q-avatar>
           <q-icon name="arrow_drop_down" size="16px" />
 
@@ -113,7 +118,7 @@
                 <q-item-section>
                   <div>
                     Signed in as
-                    <strong>{{ $store.state.user.user.username }}</strong>
+                    <strong>{{ $store.state.auth.account.user.displayName }}</strong>
                   </div>
                 </q-item-section>
               </q-item>
@@ -127,10 +132,10 @@
                 </q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable class="layout__menu-link">
+              <q-item clickable class="layout__menu-link" to="/user">
                 <q-item-section>Your profile</q-item-section>
               </q-item>
-              <q-item clickable class="layout__menu-link">
+              <!-- <q-item clickable class="layout__menu-link">
                 <q-item-section>Your repositories</q-item-section>
               </q-item>
               <q-item clickable class="layout__menu-link">
@@ -148,7 +153,7 @@
               </q-item>
               <q-item clickable class="layout__menu-link">
                 <q-item-section>Settings</q-item-section>
-              </q-item>
+              </q-item> -->
               <q-item clickable class="layout__menu-link" @click="signOut">
                 <q-item-section>Sign out</q-item-section>
               </q-item>
@@ -166,14 +171,18 @@
 
 <script lang="ts">
 import { useStore } from 'src/store';
+import { goToLink } from 'src/Setting';
+import { logout } from 'src/auth/AuthBackend';
 
 export default {
   name: 'Header',
   setup() {
     const $store = useStore();
 
-    function signOut() {
-      void $store.dispatch('user/signOut');
+    async function signOut() {
+      await logout()
+      void $store.dispatch('auth/signOut');
+      goToLink('/signout')
     }
 
     return { signOut };

@@ -1,9 +1,23 @@
+// Copyright 2022 me@xiexianbin.cn. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/AuthLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
       component: () => import('pages/Index.vue'),
@@ -14,7 +28,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/signin',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/SampleLayout.vue'),
     children: [{
         path: '',
         component: () => import('src/pages/SignIn.vue'),
@@ -24,11 +38,66 @@ const routes: RouteRecordRaw[] = [
       }],
   },
   {
+    path: '/signout',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/SignOut.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
     path: '/signup',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/SampleLayout.vue'),
     children: [
       {
         path: '', component: () => import('src/pages/SignUp.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
+    path: '/signin/oauth/authorize',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/SignInOAuth.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
+    path: '/signup/oauth/authorize',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/SignUpOAuth.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
+    path: '/callback',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/Callback.vue'),
+        meta: {
+          isPublic: true
+        }
+      }],
+  },
+  {
+    path: '/forget',
+    component: () => import('layouts/SampleLayout.vue'),
+    children: [{
+        path: '',
+        component: () => import('src/pages/Forget.vue'),
         meta: {
           isPublic: true
         }
@@ -47,7 +116,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/user',
-    component: () => import('layouts/AuthLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '', component: () => import('src/pages/user/Index.vue'),
@@ -55,7 +124,22 @@ const routes: RouteRecordRaw[] = [
           isPublic: false,
           role: 'user'
         }
-      }],
+      },
+      {
+        path: 'tokens', component: () => import('src/pages/user/tokens/Index.vue'),
+        meta: {
+          isPublic: false,
+          role: 'admin'
+        }
+      },
+      {
+        path: 'records', component: () => import('src/pages/user/records/Index.vue'),
+        meta: {
+          isPublic: false,
+          role: 'admin'
+        }
+      }
+    ],
   },
   {
     path: '/manager',
@@ -69,28 +153,7 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'organizations', component: () => import('src/pages/manager/organizations/Index.vue'),
-        meta: {
-          isPublic: false,
-          role: 'admin'
-        }
-      },
-      {
-        path: 'users', component: () => import('src/pages/manager/users/Index.vue'),
-        meta: {
-          isPublic: false,
-          role: 'admin'
-        }
-      },
-      {
         path: 'providers', component: () => import('src/pages/manager/providers/Index.vue'),
-        meta: {
-          isPublic: false,
-          role: 'admin'
-        }
-      },
-      {
-        path: 'applications', component: () => import('src/pages/manager/applications/Index.vue'),
         meta: {
           isPublic: false,
           role: 'admin'

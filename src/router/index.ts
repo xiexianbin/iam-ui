@@ -1,4 +1,17 @@
-import { Cookies } from 'quasar';
+// Copyright 2022 me@xiexianbin.cn. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import { route } from 'quasar/wrappers';
 import {
   createMemoryHistory,
@@ -8,6 +21,8 @@ import {
 } from 'vue-router';
 import { StateInterface } from '../store';
 import routes from './routes';
+import * as AuthBackend from 'src/auth/AuthBackend'
+import { goToLink } from 'src/Setting';
 
 /*
  * If not building with SSR mode, you can
@@ -36,21 +51,19 @@ export default route<StateInterface>(function ({ store } /* { store, ssrContext 
   });
 
   // router Guard
-  Router.beforeEach((to, from, next) => {
-    // if current status is sign out, and localStorage has token, then auto sign in
-    if (!store.state.auth.isSignin && localStorage.getItem('token')) {
-      console.log('localStorage is valid, auto sign in.');
-      void store.dispatch('user/asyncSetUser', localStorage.getItem('token'));
+  Router.beforeEach(async (to, from, next) => {
+    // if current status is sign out, and Cookies has iam_session_id, then auto sign in
+    if (!store.state.auth.isSignin && !to.meta.isPublic) {
+      console.log('not signin, try auto sign in...');
+      await AuthBackend.getAccount('').then((resp) => {
+        if (resp.status === 'error') {
+          console.log('not signin', resp)
+          goToLink('/signin')
+        } else {
+          void store.dispatch('auth/setAccount', resp);
+        }
+      })
     }
-
-    // get token from cookies
-    if (!store.state.auth.isSignin && !to.meta.isPublic && Cookies.has('token')) {
-      const token = Cookies.get('token')
-      console.log('jwt is:', token)
-      void store.dispatch('auth/asyncSetUser', token);
-    }
-
-    // guard token
 
     next();
   });
