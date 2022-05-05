@@ -8,6 +8,15 @@ export const getUser = async (owner: string, name: string): Promise<IUser> => {
 }
 
 
+export const setPassword = async (userOwner: string, userName: string, oldPassword: string, newPassword: string): Promise<IResponse> => {
+  const formData = new FormData();
+  formData.append('userOwner', userOwner);
+  formData.append('userName', userName);
+  formData.append('oldPassword', oldPassword);
+  formData.append('newPassword', newPassword);
+  return api.post('/api/set-password', formData);
+}
+
 export const sendCode = async (checkType: string, checkId: string, checkKey: string, dest: string, type: string, orgId: string, checkUser: string) => {
   const formData = new FormData();
   formData.append('checkType', checkType);

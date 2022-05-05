@@ -86,7 +86,7 @@
             <q-item class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
               <q-item-section>
                 <q-input
-                  v-model="password"
+                  v-model="oldPassword"
                   label="Old Password *"
                   :type="isPassword ? 'password' : 'text'"
                   hint="Old Password"
@@ -141,7 +141,7 @@
             </q-item>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="bg-primary text-white">Change Password</q-btn>
+            <q-btn :loading="changePwdBtnLoading" @click="changePassword" class="bg-primary text-white">Change Password</q-btn>
           </q-card-actions>
         </q-card>
 
@@ -185,7 +185,8 @@
                         size="sm"
                         type="a"
                         v-if='k.provider.category === "OAuth"' :key='k.provider.clientId'
-                        :href="user.github !=='' ? unlinkUser(k.provider.type) : getAuthUrl(application, k.provider, 'link')"
+                        :href="user.github !=='' ? '#' : getAuthUrl(application, k.provider, 'link')"
+                        @click="user.github !=='' ? unlinkUser(k.provider.type) : 'javascript:void(0)';"
                       />
                     </div>
                   </q-item-section>
@@ -244,6 +245,10 @@ export default defineComponent({
     const application = ref({} as IApplication)
 
     const isPassword = ref(true)
+    const oldPassword = ref('')
+    const password = ref('')
+    const confirm = ref('')
+    const changePwdBtnLoading = ref(false)
     const grey = ref('grey')
 
     async function getUserApplication() {
@@ -260,6 +265,29 @@ export default defineComponent({
         });
     }
 
+    async function changePassword() {
+      if (user.value.password !== '' && oldPassword.value === '') {
+        Util.showMessage('error', 'oldpassword Empty input!');
+        return;
+      }
+      if (password.value === '' || confirm.value === '') {
+        Util.showMessage('error', 'password or confirm Empty input!');
+        return;
+      }
+      if (password.value !== confirm.value) {
+        Util.showMessage('error', 'user: password and confirm typed do not match.');
+        return;
+      }
+      changePwdBtnLoading.value = true;
+      void await UserBackend.setPassword(user.value.owner, user.value.name, oldPassword.value, password.value).then((res) => {
+        changePwdBtnLoading.value = false;
+        if (res.status === 'ok') {
+          Util.showMessage('success', 'Password Change Success');
+        }
+        else Util.showMessage('error', res.msg);
+      })
+    }
+
     async function unlinkUser(providerType: string) {
       const body = {
         providerType: providerType,
@@ -267,7 +295,9 @@ export default defineComponent({
       void await AuthBackend.unlink(body).then((res) => {
           if (res.status === 'ok') {
             Util.showMessage('success', 'Unlinked successfully');
-            Setting.goToLink('/user')
+            setTimeout(() => {
+              Setting.goToLink('/user')
+            }, 3000);
           } else {
             Util.showMessage('error', `Failed to unlink: ${res.msg}`);
           }
@@ -283,9 +313,6 @@ export default defineComponent({
     })
 
     return {
-      user_details: {},
-      password_dict: {},
-
       thirdPartLogo: Setting.ThirdPartLogo,
       getAuthUrl,
       unlinkUser,
@@ -295,6 +322,12 @@ export default defineComponent({
       applications,
 
       isPassword,
+      oldPassword,
+      password,
+      confirm,
+      changePassword,
+      changePwdBtnLoading,
+
       grey,
     }
   }

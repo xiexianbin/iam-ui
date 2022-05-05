@@ -141,7 +141,7 @@ export default defineComponent({
               Setting.goToLink(`${oAuthParams.redirectUri}${concatChar}${responseType}=${token}&state=${oAuthParams.state}&token_type=bearer`);
             } else if (responseType === 'link') {
               const from = innerParams.get('from');
-              Setting.goToLinkSoft(this, from);
+              Setting.goToLinkSoft(null, from);
             } else if (responseType === 'saml') {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               const SAMLResponse = res.data;
@@ -160,7 +160,7 @@ export default defineComponent({
 
     return {
       msg,
-    };
+    }
   },
 })
 </script>
