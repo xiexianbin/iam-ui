@@ -82,7 +82,7 @@ module.exports = configure(function (ctx) {
       // env
       env: {
         API: ctx.dev
-          ? 'http://localhost:7001'
+          ? ''
           : 'https://iam-api.xiexianbin.cn',
         CDN: ctx.dev ? '' : ''
       }
