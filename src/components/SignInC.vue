@@ -100,7 +100,8 @@
                   :loading="submitLoading"
                 />
                 No account yet?
-                <router-link class="text-primary" to="/signup" :disabled="!applicationRef.enableSignUp">
+                <!-- :disabled="!applicationRef.enableSignUp" -->
+                <router-link class="text-primary" to="/signup">
                   Signup
                 </router-link>
               </div>
