@@ -159,7 +159,8 @@ import { useQuasar } from 'quasar'
 import * as ApplicationBackend from 'src/backend/ApplicationBackend'
 import * as AuthBackend from 'src/auth/AuthBackend'
 import * as Setting from 'src/Setting'
-import * as Util from 'src/auth/Util'
+import * as AUtil from 'src/auth/Util'
+import * as Util from 'src/Util';
 import { getAuthUrl } from 'src/auth/Provider';
 import { IAccount, IResponse } from './models/account';
 import { IApplication } from 'src/components/models/application';
@@ -210,7 +211,7 @@ export default defineComponent({
     const agreement = ref(false);
 
     async function getApplicationLogin() {
-      const oAuthParams = Util.getOAuthGetParameters(undefined)
+      const oAuthParams = AUtil.getOAuthGetParameters(undefined)
       void await AuthBackend.getApplicationLogin(oAuthParams).then(res => {
         if (res.name !== '') {
           application = res as IApplication
@@ -280,7 +281,7 @@ export default defineComponent({
         // })
       } else {
         //oauth
-        const oAuthParams = Util.getOAuthGetParameters(undefined)
+        const oAuthParams = AUtil.getOAuthGetParameters(undefined)
 
         if (
           oAuthParams !== null &&

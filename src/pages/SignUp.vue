@@ -160,8 +160,8 @@ import CodeVerify from 'src/components/utils/CodeVerify.vue';
 import * as ApplicationBackend from 'src/backend/ApplicationBackend'
 import * as AuthBackend from 'src/auth/AuthBackend'
 import * as Setting from 'src/Setting'
+import * as Util from 'src/Util'
 import * as UserBackend from 'src/backend/UserBackend'
-import * as Util from 'src/auth/Util'
 import { IApplication } from 'src/components/models/application';
 import { ISignupRequestForm } from 'src/components/models/account';
 

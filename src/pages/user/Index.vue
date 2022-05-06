@@ -243,7 +243,7 @@ import * as ApplicationBackend from 'src/backend/ApplicationBackend'
 import * as AuthBackend from 'src/auth/AuthBackend'
 import * as UserBackend from 'src/backend/UserBackend'
 import * as Setting from 'src/Setting'
-import * as Util from 'src/auth/Util'
+import * as Util from 'src/Util'
 import { getAuthUrl } from 'src/auth/Provider';
 import { IUser } from 'src/components/models/user';
 import { IApplication } from 'src/components/models/application';

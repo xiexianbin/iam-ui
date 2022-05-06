@@ -146,7 +146,7 @@
               icon="key"
               :done="step > 3"
             >
-              Password Change Success, Please click <a href="/signin">signin</a>...
+              Password Change Success, Please click <q-btn label="signin" to="/signin"></q-btn>...
             </q-step>
 
             <!-- <template v-slot:navigation>
@@ -183,7 +183,8 @@ import * as ApplicationBackend from 'src/backend/ApplicationBackend'
 import * as AuthBackend from 'src/auth/AuthBackend'
 import * as Setting from 'src/Setting'
 import * as UserBackend from 'src/backend/UserBackend'
-import * as Util from 'src/auth/Util'
+import * as AUtil from 'src/auth/Util'
+import * as Util from 'src/Util'
 import { IApplication } from 'src/components/models/application'
 import { IUser } from 'src/components/models/user'
 
@@ -264,7 +265,7 @@ export default defineComponent({
           });
           break;
         case 'step2':
-          const oAuthParams = Util.getOAuthGetParameters(undefined);
+          const oAuthParams = AUtil.getOAuthGetParameters(undefined);
           let code = ''
           if (verifyType.value === 'email') {
             code = emailCode.value
@@ -283,7 +284,7 @@ export default defineComponent({
             if (res.status === 'ok') {
               step.value = 2
             } else {
-                Util.showMessage('error', res.msg);
+              Util.showMessage('error', res.msg);
             }
           })
           break

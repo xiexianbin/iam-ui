@@ -25,7 +25,6 @@ import { IUser } from './components/models/user';
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 export const ServerUrl = process.env.API;
-export const SessionName = 'iam_session_id';
 export const ApplicationName = 'app-built-in';
 
 // export const StaticBaseUrl = 'https://cdn.jsdelivr.net/gh/casbin/static';
@@ -308,6 +307,11 @@ export function openLinkSafe(link: string) {
 }
 
 export function goToLink(link: string) {
+  // if (link.startsWith('/')) {
+  //   window.location.href = '/#' + link;
+  // } else {
+  //   window.location.href = link;
+  // }
   window.location.href = link;
 }
 

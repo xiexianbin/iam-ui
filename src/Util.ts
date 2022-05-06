@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-<template>
-  <q-page padding>
-    <div class="row justify-center q-pa-md">
-      <p>已退出，3秒后跳转 <router-link to="/signin">signin</router-link>...</p>
-    </div>
-  </q-page>
-</template>
+import { Notify } from 'quasar';
 
-<script>
-import { goToLink } from 'src/Setting';
-import { defineComponent } from 'vue';
+export function showMessage(type: string, text: string) {
+  console.log(type, text)
 
-export default defineComponent({
-  name: 'SignOut',
-  setup() {
-    setTimeout(
-      ()=>{
-        goToLink('/signin')
-      }, 3000)
-    return {}
+  if (type === 'success' || type === 'info' || type === 'ok') {
+    Notify.create({
+      message: text,
+      color: 'positive'
+    })
+  } else if (type === 'error') {
+    Notify.create({
+      message: text,
+      color: 'negative'
+    })
+  } else {
+    Notify.create({
+      message: text,
+      color: 'warning'
+    })
   }
-})
-</script>
+}

@@ -15,8 +15,7 @@
 <template>
   <q-page padding>
     <div class="row justify-center q-pa-md">
-      <router-link to="/user">user</router-link>
-      <span>--</span>
+      <router-link to="/user">user</router-link><br>
       <router-link to="/manager">manager</router-link>
     </div>
   </q-page>

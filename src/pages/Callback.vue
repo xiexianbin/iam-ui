@@ -41,7 +41,8 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar'
 import * as AuthBackend from 'src/auth/AuthBackend'
 import * as Setting from 'src/Setting'
-import * as Util from 'src/auth/Util'
+import * as AUtil from 'src/auth/Util'
+import * as Util from 'src/Util'
 
 export default defineComponent({
   name: 'CallBack',
@@ -58,7 +59,7 @@ export default defineComponent({
       // realRedirectUrl = 'http://localhost:9000'
       const params = new URLSearchParams(window.location.search);
       const state = params.get('state');
-      const queryString = Util.stateToGetQueryParams(state);
+      const queryString = AUtil.stateToGetQueryParams(state);
       return new URLSearchParams(queryString);
     };
 
@@ -135,7 +136,7 @@ export default defineComponent({
         redirectUri: redirectUri,
         method: method,
       };
-      const oAuthParams = Util.getOAuthGetParameters(innerParams);
+      const oAuthParams = AUtil.getOAuthGetParameters(innerParams);
       const concatChar = oAuthParams?.redirectUri?.includes('?') ? '&' : '?';
       void AuthBackend.login(body, oAuthParams)
         .then((res) => {

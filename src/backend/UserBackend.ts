@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as Util from 'src/auth/Util';
 import { api } from 'src/boot/axios';
+import * as Util from 'src/Util';
 import { IHumanCheck, IResponse } from 'src/components/models/account';
 import { IUser } from 'src/components/models/user';
 

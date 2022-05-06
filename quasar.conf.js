@@ -83,7 +83,7 @@ module.exports = configure(function (ctx) {
       env: {
         API: ctx.dev
           ? ''
-          : 'https://iam-api.xiexianbin.cn',
+          : '', // env, 'https://iam-api.xiexianbin.cn',
         CDN: ctx.dev ? '' : ''
       }
     },

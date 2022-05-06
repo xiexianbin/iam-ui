@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import * as Util from 'src/auth/Util'
+import * as Util from 'src/Util'
 import * as UserBackend from 'src/backend/UserBackend'
 import { IHumanCheck } from '../models/account';
 

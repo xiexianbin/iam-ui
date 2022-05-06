@@ -15,29 +15,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Notify } from 'quasar'
 import { IOAuthParams } from 'src/components/models/oauth';
-
-export function showMessage(type: string, text: string) {
-  console.log(type, text)
-
-  if (type === 'success') {
-    Notify.create({
-      message: text,
-      color: 'positive'
-    })
-  } else if (type === 'error') {
-    Notify.create({
-      message: text,
-      color: 'negative'
-    })
-  } else {
-    Notify.create({
-      message: text,
-      color: 'warning'
-    })
-  }
-}
 
 function getRefinedValue(value: string | null){
   return (value === null) ? '' : value

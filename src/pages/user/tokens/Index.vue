@@ -13,15 +13,17 @@
 // limitations under the License.
 
 <template>
-  <q-page padding>
-    <div class="q-pa-md">
-      <q-table
-        title="Users"
-        :rows="userList.data"
-        :columns="columns"
-        row-key="username"
-        :pagination="initialPagination"
-      />
+  <q-page padding class="q-pa-md">
+    <div class="row page-wrapper justify-center q-col-gutter-md">
+      <div class="col-12">
+        <q-table
+          title="Users"
+          :rows="userList.data"
+          :columns="columns"
+          row-key="username"
+          :pagination="initialPagination"
+        />
+      </div>
     </div>
   </q-page>
 </template>
